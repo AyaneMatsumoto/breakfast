@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>breakfast</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/stylesheets/photoalbum.css">
+</head>
+<body>
+  <header>
+      <h1>Good morning breakfast</h1>
+      <h2>
+        <% if @message == '1' then %>
+        <%= "既に登録されています" %>
+        <% elsif @message == '1' then %>
+        <%= "登録しました" %>
+        <% end %>
+      </h2>
+      <div id="form-box">
+          <form method="post" action="/register" enctype="multipart/form-data">
+              <input type="text" name="name" placeholder="user name">
+              <input type="submit" value="resister">
+          </form>
+      </div>
+  </header>
+  <main>
+    <% @images.each do |image| %>
+      <article>
+        <figure>
+          <% url = FlickRaw.url image%>
+          <img src="<%= url %>">
+        </figure>
+        <section>
+          <%
+          info = flickr.photos.getInfo :photo_id => image.id, :secret => image.secret
+          tags = info.tags
+          tag_list = tags.map{ |tag| "#{ tag }" }.join(", ")
+          %>
+          <p><%= image.title %></p>
+          <p>description:<%= info.description %></p>
+          <p>tags:<%= tag_list %></p>
+          <form action="/like" method="post">
+            <input type="hidden" name="title" value="<%= image.title %>">
+            <input type="hidden" name="url" value="<%= url %>">
+            <input type="hidden" name="description" value="<%= info.description %>">
+            <input type="hidden" name="tags" value="<%= tag_list %>">
+            <input type="submit" value="like">
+          </form>
+        </section>
+      </article>
+    <% end %>
+    </main>
+</body>
+</html>
