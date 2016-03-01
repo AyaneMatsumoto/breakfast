@@ -10,9 +10,10 @@
   <header>
       <h1>Good morning breakfast</h1>
       <h2>
+        <a href ="/mylikes">お気に入り一覧</a>
         <% if @message == '1' then %>
         <%= "既に登録されています" %>
-        <% elsif @message == '1' then %>
+        <% elsif @message == '0' then %>
         <%= "登録しました" %>
         <% end %>
       </h2>
@@ -23,6 +24,7 @@
           </form>
       </div>
   </header>
+  
   <main>
     <% @images.each do |image| %>
       <article>

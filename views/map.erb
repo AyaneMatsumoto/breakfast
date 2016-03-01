@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>breakfast</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/stylesheets/photoalbum.css"> 
+　<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
+</head>
+<body>
+
+<!--map-->
+<div id="map" style="width: 600px; height: 400px;"></div>
+<!--map-->
+
+<!--<% @images.each do |image| %>-->
+<!--<%= image.tags %>-->
+<!--<% end %>-->
+
+
+<h3>パターン1</h3>
+<% @lats.each do |lat| %>
+<p>lat: <%= lat %> </p>
+<% end %>
+<% @lons.each do |lon| %>
+<p>lon: <%= lon %> </p>
+<% end %>
+
+<h3>パターン2</h3>
+<% @positions.each do |position| %>
+<p>lat: <%= position[:lat] %> </p>
+<p>lon: <%= position[:lon] %> </p>
+<% end %>
+
+<h3>パターン3</h3>
+<% @images_with_position.each do |image| %>
+<p>title: <%= image[:title] %> </p>
+<p>description: <%= image[:description] %> </p>
+<p>lat: <%= image[:lat] %> </p>
+<p>lon: <%= image[:lon] %> </p>
+<% end %>
+
+
+<script type="text/javascript">
+  function attachMessage(marker, msg) {
+    google.maps.event.addListener(marker, 'click', function(event) {
+      new google.maps.InfoWindow({
+        content: msg
+      }).open(marker.getMap(), marker);
+    });
+  }
+// 位置情報と表示データの組み合わせ
+  var data = new Array();//マーカー位置の緯度経度
+  data.push({position: new google.maps.LatLng(35.681382, 13.766084), content: '東京駅'});
+  data.push({position: new google.maps.LatLng(35.690921, 139.700258), content: '新宿駅'});
+ 
+  var myMap = new google.maps.Map(document.getElementById('map'), {
+    zoom: 1,//地図縮尺
+    center: new google.maps.LatLng(35.69106, 139.733989),//地図の中心点
+    scrollwheel: false,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  });
+ 
+  for (i = 0; i < data.length; i++) {
+    var myMarker = new google.maps.Marker({
+      position: data[i].position,
+      map: myMap
+    });
+    attachMessage(myMarker, data[i].content);
+  }
+</script>
+</body>
+</html>
+<!--str = 'http://instagram.com/p/hoge/'-->
+<!--id = str.match(%r{http://instagram.com/p/(.+?)/})[1]-->
+<!-- geo:lat=35630361, geo:lon=139625805,-->
+<!--puts id-->
+<!--# p (str.match(%r{http://instagram.com/p/(.+?)/})).class => MatchData-->
