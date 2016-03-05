@@ -11,6 +11,7 @@ gem 'sinatra-contrib'
 gem 'activerecord'
 gem 'sinatra-activerecord'
 gem 'nokogiri'
+gem 'bcrypt' 
 
 gem 'dotenv'
 

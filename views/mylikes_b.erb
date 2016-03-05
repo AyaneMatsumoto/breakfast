@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>breakfast</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/stylesheets/photoalbum.css">
+</head>
+<body>
+  <header>
+      <h1>my likes</h1>
+      <p><a href="/">view all</a></p>
+  </header>
+  <main>
+    <% @images.each do |image| %>
+      <article>
+        <figure>
+          <img src="<%= image.url %>">
+        </figure>
+        <section>
+          <p><%= image.title %></p>
+          <p>description:<%= image.description %></p>
+          <p>tags:<%= image.tags %></p>
+          <form action="/unlike" method="post">
+             <input type="hidden" name="id" value=<%= image.id %>>
+            <input type="submit" value="unlike">
+          </form>
+        </section>
+      </article>
+    <% end %>
+    </main>
+</body>
+</html>

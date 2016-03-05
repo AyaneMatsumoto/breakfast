@@ -1,46 +1,109 @@
-<!DOCTYPE html>
-<html lang="ja">
+<!DOCTYPE HTML>
+<html lang="en-US">
 <head>
-  <meta charset="UTF-8">
-  <title>breakfast</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/stylesheets/photoalbum.css"> 
-　<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Obscura</title>
+<link rel="stylesheet" type="text/css" media="all" href="/stylesheets/style.css" />
+<link rel="stylesheet" type="text/css" href="/stylesheets/media-queries.css" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,300italic,300,700,700italic|Open+Sans+Condensed:300,700' rel="stylesheet" type='text/css'>
+<!--[if IE 8]>
+<link rel="stylesheet" type="text/css" href="style/css/ie8.css" media="all" />
+<![endif]-->
+<!--[if IE 9]>
+<link rel="stylesheet" type="text/css" href="style/css/ie9.css" media="all" />
+<![endif]-->
+<script type="text/javascript" src="/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="/js/ddsmoothmenu.js"></script>
+<script type="text/javascript" src="/js/retina.js"></script>
+<script type="text/javascript" src="/js/selectnav.js"></script>
+<script type="text/javascript" src="/js/jquery.masonry.min.js"></script>
+<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+<script type="text/javascript" src="/js/jquery.backstretch.min.js"></script>
+<script type="text/javascript" src="/js/jquery.dcflickr.1.0.js"></script>
+<script type="text/javascript" src="/js/twitter.min.js"></script>
+<script type="text/javascript" src="/js/function.js"></script>
+<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Elsie:400,900">
+<script type="text/javascript">
+	$.backstretch("/images/bg/1.jpg");
+</script>
 </head>
 <body>
+<div class="scanlines"></div>
 
-<!--map-->
-<div id="map" style="width: 600px; height: 400px;"></div>
-<!--map-->
+<!-- Begin Header -->
+<div class="header-wrapper opacity">
+	<div class="header">
+		<!-- Begin Logo -->
+		<div class="logo">
+			<h1>Food Trip
+			<% if session[:user] %>
+				|
+				<span id="username"><%= User.find(session[:user]).name %></span>
+			<% end %>
+			</h1>
+	    </div>
+		<!-- End Logo -->
+		<!-- Begin Menu -->
+		<div id="menu-wrapper">
+			<div id="menu" class="menu">
+				<ul id="tiny">
+					<li><a href="/">Top</a></li>
+					<% if session[:user]  %>
+						<li><a href="/mylikes">MyPage</a></li>
+						<li class="active"><a href="/map">Map</a></li>
+						<li><a href="/signout">Signout</a></li>
+					<% else %>
+						<li><a>Please Sign in or Sign up</a></li>
+					<% end %>
+				</ul>
+			</div>
+		</div>
+		<div class="clear"></div>
+		<!-- End Menu -->
+	</div>
+</div>
+<!-- End Header -->
 
-<!--<% @images.each do |image| %>-->
-<!--<%= image.tags %>-->
-<!--<% end %>-->
-
-
-<h3>パターン1</h3>
-<% @lats.each do |lat| %>
-<p>lat: <%= lat %> </p>
-<% end %>
-<% @lons.each do |lon| %>
-<p>lon: <%= lon %> </p>
-<% end %>
-
-<h3>パターン2</h3>
-<% @positions.each do |position| %>
-<p>lat: <%= position[:lat] %> </p>
-<p>lon: <%= position[:lon] %> </p>
-<% end %>
-
-<h3>パターン3</h3>
-<% @images_with_position.each do |image| %>
-<p>title: <%= image[:title] %> </p>
-<p>description: <%= image[:description] %> </p>
-<p>lat: <%= image[:lat] %> </p>
-<p>lon: <%= image[:lon] %> </p>
-<% end %>
-
-
+<!-- Begin Wrapper -->
+<div class="wrapper">
+	<% unless session[:user] %>
+		<div class="box" id="signup">
+			<h1 class="title">Sign up</h1>
+			<div class="form-container">
+				<form class="forms" method="post" action="/signup" enctype="multipart/form-data">
+					<fieldset>
+						<ol>
+							<li class="form-row text-input-row"><label>Name</label><input type="text" name="name"/></li> 
+							<li class="form-row text-input-row"><label>password</label><input type="password" name="password" /></li>
+							<li class="form-row text-input-row"><label>password_confirmation</label><input type="password" name="password_confirmation"/></li>
+							<li class="button-row"><input type="submit" value="submit" name="submit" class="btn-submit" /></li>
+						</ol>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+		<div class="box" id="signin">
+			<h1 class="title">Sign in</h1>
+			<div class="form-container">
+				<form class="forms" method="post" action="/signin" enctype="multipart/form-data">
+					<fieldset>
+						<ol>
+							<li class="form-row text-input-row"><label>Name</label><input type="text" name="name"/></li> 
+							<li class="form-row text-input-row"><label>password</label><input type="password" name="password" /></li>
+							<li class="button-row"><input type="submit" value="submit" name="submit" class="btn-submit" /></li>
+						</ol>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	<% end %>
+	<div class="box">
+		<div class="map" id="map"style="width: 100%; height: 400px;"></div>
+	</div>	
+</div>
+<!-- End Wrapper -->
 <script type="text/javascript">
   function attachMessage(marker, msg) {
     google.maps.event.addListener(marker, 'click', function(event) {
@@ -51,9 +114,9 @@
   }
 // 位置情報と表示データの組み合わせ
   var data = new Array();//マーカー位置の緯度経度
-  data.push({position: new google.maps.LatLng(35.681382, 13.766084), content: '東京駅'});
-  data.push({position: new google.maps.LatLng(35.690921, 139.700258), content: '新宿駅'});
- 
+  <% @images_with_position.each do |image| %>
+    data.push({position: new google.maps.LatLng(<%= image[:lat] %>, <%= image[:lon] %>),icon:"<%= image[:url] %>" ,content: '<%= image[:title] %><img src="<%= image[:url] %>" style="width:150px;"></img>'});
+  <% end %>
   var myMap = new google.maps.Map(document.getElementById('map'), {
     zoom: 1,//地図縮尺
     center: new google.maps.LatLng(35.69106, 139.733989),//地図の中心点
@@ -64,15 +127,15 @@
   for (i = 0; i < data.length; i++) {
     var myMarker = new google.maps.Marker({
       position: data[i].position,
-      map: myMap
+      map: myMap,
+      icon:{
+	    url : data[i].icon,
+	    scaledSize : new google.maps.Size(35, 35)
+	　}
     });
     attachMessage(myMarker, data[i].content);
   }
 </script>
+<script type="text/javascript" src="/js/scripts.js"></script>
 </body>
 </html>
-<!--str = 'http://instagram.com/p/hoge/'-->
-<!--id = str.match(%r{http://instagram.com/p/(.+?)/})[1]-->
-<!-- geo:lat=35630361, geo:lon=139625805,-->
-<!--puts id-->
-<!--# p (str.match(%r{http://instagram.com/p/(.+?)/})).class => MatchData-->

@@ -1,0 +1,12 @@
+$(function(){
+    $("#signin_button").click(function(){
+        $("#signin").css("display","block")
+        $("#signup").css("display","none")
+    })
+})
+$(function(){
+    $("#signup_button").click(function(){
+        $("#signup").css("display","block")
+        $("#signin").css("display","none")
+    })
+})

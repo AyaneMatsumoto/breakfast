@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>breakfast</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/stylesheets/photoalbum.css">
+</head>
+<body>
+  <% unless session[:user] %>
+ <h2>未ログイン</h2>
+<% else %>
+ <a href="/signout">ログアウト</a>
+ <h2><%= User.find(session[:user]).name %>としてログイン</h2>
+<% end %>
+  <header>
+      <h1>Good morning breakfast</h1>
+    <% if session[:user] %>
+          <a href ="/mylikes">お気に入り一覧</a>
+    <% else %>
+        <div id="form-box">
+            <form method="post" action="/signup" enctype="multipart/form-data">
+                <input type="text" name="name" placeholder="user name">
+                <input type="password" name="password" placeholder="password">
+                <input type="password" name="password_confirmation" placeholder="passwordの確認">
+                <input type="submit" value="signup">
+            </form>
+        </div>
+      <div id="form-box">
+        <form method="post" action="/signin" enctype="multipart/form-data">
+            <input type="text" name="name" placeholder="user name">
+            <input type="text" name="password" placeholder="password">
+            <input type="submit" value="signin">
+        </form>
+      </div>
+    <% end %>
+  </header>
+  <main>
+  <% @images_added.each do |image_added| %>
+    <article>
+      <figure>
+        <img src="<%= image_added.url %>">
+      </figure>
+      <section>
+        <p><%= image_added.title %></p>
+        <p>description:<%= image_added.description %></p>
+        <p>tags:<%= image_added.tags %></p>
+      </section>
+    </article>
+     <form action="/like" method="post">
+        <input type="hidden" name="title" value="<%= image_added.title %>">
+        <input type="hidden" name="url" value="<%= image_added.url %>">
+        <input type="hidden" name="description" value="<%= image_added.description %>">
+        <input type="hidden" name="tags" value="<%= image_added.tags %>">
+        <input type="submit" value="like">
+    </form>
+  <% end %>
+  </main>
+</body>
+</html>
